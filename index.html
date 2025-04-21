@@ -99,12 +99,20 @@
         // performance, uncomment the following line:
         // config.devicePixelRatio = 1;
 
-
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
 
-        canvas.style.width = "1668px";
-        canvas.style.height = "2388px";
+        // Set height to 90vh
+        canvas.style.height = "90vh";
+
+        // Maintain the aspect ratio 1668:2388 for the width
+        var aspectRatio = 1668 / 2388;
+        canvas.style.width = (window.innerHeight * 0.9 * aspectRatio) + "px";
+        
+        // Recalculate width on window resize
+        window.addEventListener('resize', function() {
+          canvas.style.width = (window.innerHeight * 0.9 * aspectRatio) + "px";
+        });
       }
 
       loadingBar.style.display = "block";
