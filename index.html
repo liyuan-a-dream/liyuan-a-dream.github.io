@@ -101,6 +101,7 @@
     // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
     // expected to change.
 
+    // 计算并调整 canvas 大小，保持 1668/2388 的比例
     function adjustCanvasSize() {
       var aspectRatio = 1668 / 2388; // 保持宽高比
 
@@ -108,25 +109,20 @@
       var windowWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
 
-      // 计算90vw和90vh的宽度和高度
-      var widthByVw = windowWidth * 0.9; // 90%视口宽度
-      var heightByVh = windowHeight * 0.9; // 90%视口高度
+      // 计算宽度和高度
+      var canvasWidth = windowWidth;
+      var canvasHeight = windowWidth / aspectRatio;
 
-      // 计算出根据这两个值保持宽高比后的尺寸
-      var canvasWidth = widthByVw;
-      var canvasHeight = widthByVw / aspectRatio; // 根据宽度和宽高比计算高度
-
-      // 如果根据宽度计算的高度大于90vh，则需要根据90vh来重新计算宽度
-      if (canvasHeight > heightByVh) {
-        canvasHeight = heightByVh;
-        canvasWidth = heightByVh * aspectRatio; // 根据高度和宽高比计算宽度
+      // 如果根据宽度计算的高度大于视窗高度，则调整为根据高度来计算
+      if (canvasHeight > windowHeight) {
+        canvasHeight = windowHeight;
+        canvasWidth = windowHeight * aspectRatio;
       }
 
-      // 设置canvas的大小
+      // 设置 canvas 大小
       canvas.style.width = canvasWidth + "px";
       canvas.style.height = canvasHeight + "px";
     }
-
 
     // 页面加载时和窗口大小变化时调整 canvas 大小
     window.addEventListener('load', adjustCanvasSize);
