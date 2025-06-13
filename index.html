@@ -11,19 +11,6 @@
     content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes">
 </head>
 
-<style>
-  #unity-container {
-    width: 100%;
-    height: 100vh;
-    position: relative;
-  }
-
-  #unity-canvas {
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
 <body>
   <div id="unity-container" class="unity-desktop">
     <canvas id="unity-canvas" width=1668 height=2388 tabindex="-1"></canvas>
@@ -110,13 +97,13 @@
       var windowHeight = window.innerHeight;
 
       // 计算宽度和高度
-      var canvasWidth = windowWidth;
-      var canvasHeight = windowWidth / aspectRatio;
+      var canvasHeight = windowHeight * 0.9;
+      var canvasWidth = windowHeight * aspectRatio;
 
       // 如果根据宽度计算的高度大于视窗高度，则调整为根据高度来计算
-      if (canvasHeight > windowHeight) {
-        canvasHeight = windowHeight;
-        canvasWidth = windowHeight * aspectRatio;
+      if (canvasWidth > windowWidth) {
+        canvasWidth = windowWidth;
+        canvasHeight = windowWidth / aspectRatio;
       }
 
       // 设置 canvas 大小
