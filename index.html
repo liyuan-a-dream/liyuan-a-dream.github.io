@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Unity WebGL Player | liyuan-a-dream</title>
+  <title>liyuan-a-dream</title>
   <link rel="shortcut icon" href="TemplateData/favicon.ico">
   <link rel="stylesheet" href="TemplateData/style.css">
   <meta name="viewport"
@@ -28,7 +28,6 @@
     </div>
   </div>
   <script>
-
     var container = document.querySelector("#unity-container");
     var canvas = document.querySelector("#unity-canvas");
     var loadingBar = document.querySelector("#unity-loading-bar");
@@ -107,6 +106,9 @@
       var aspectRatio = 1668 / 2388; // 保持宽高比
       canvas.style.width = "100%"; // 宽度设置为100%
       canvas.style.height = (window.innerWidth * aspectRatio) + "px"; // 根据宽度动态调整高度
+
+      // 设置container为100%宽度和自动高度
+      container.style.width = "95vw";
 
       // 窗口大小调整时重新计算高度
       window.addEventListener('resize', function () {
