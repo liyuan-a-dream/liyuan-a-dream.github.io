@@ -16,11 +16,13 @@
     width: 100%;
     height: 100vh;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   #unity-canvas {
-    width: 100%;
-    height: 100%;
+    display: block;
   }
 </style>
 
@@ -103,17 +105,31 @@
 
     // 计算并调整 canvas 大小，保持 1668/2388 的比例
     function adjustCanvasSize() {
-      var aspectRatio = 1668 / 2388; // 保持宽高比
+      var aspectRatio = 1668 / 2388; // 原始宽高比
 
       // 获取当前视窗宽高
       var windowWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
 
-      // 计算宽度和高度
-      var canvasWidth = windowWidth;
-      var canvasHeight = windowWidth / aspectRatio;
+      var canvasWidth, canvasHeight;
 
-      // 如果根据宽度计算的高度大于视窗高度，则调整为根据高度来计算
+      // 根据宽高比计算最适合的尺寸
+      if (windowWidth / windowHeight > aspectRatio) {
+        // 视窗比canvas更宽，以高度为准
+        canvasHeight = windowHeight;
+        canvasWidth = windowHeight * aspectRatio;
+      } else {
+        // 视窗比canvas更高，以宽度为准
+        canvasWidth = windowWidth;
+        canvasHeight = windowWidth / aspectRatio;
+      }
+
+      // 确保canvas不会超出视窗范围
+      if (canvasWidth > windowWidth) {
+        canvasWidth = windowWidth;
+        canvasHeight = windowWidth / aspectRatio;
+      }
+      
       if (canvasHeight > windowHeight) {
         canvasHeight = windowHeight;
         canvasWidth = windowHeight * aspectRatio;
@@ -127,7 +143,10 @@
     // 页面加载时和窗口大小变化时调整 canvas 大小
     window.addEventListener('load', adjustCanvasSize);
     window.addEventListener('resize', adjustCanvasSize);
-
+    // 添加orientationchange事件处理移动设备旋转
+    window.addEventListener('orientationchange', function() {
+      setTimeout(adjustCanvasSize, 100);
+    });
 
     loadingBar.style.display = "block";
 
@@ -139,7 +158,16 @@
       }).then((unityInstance) => {
         loadingBar.style.display = "none";
         fullscreenButton.onclick = () => {
-          document.makeFullscreen('unity-container');
+          // 修复全屏API调用
+          if (container.requestFullscreen) {
+            container.requestFullscreen();
+          } else if (container.webkitRequestFullscreen) {
+            container.webkitRequestFullscreen();
+          } else if (container.mozRequestFullScreen) {
+            container.mozRequestFullScreen();
+          } else if (container.msRequestFullscreen) {
+            container.msRequestFullscreen();
+          }
         };
       }).catch((message) => {
         alert(message);
